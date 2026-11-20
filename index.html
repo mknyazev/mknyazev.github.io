@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misha</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: black;
+        }
+
+        #text {
+            font-family: 'Cinzel', serif;
+            font-size: 120px;
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: 0.3em;
+            color: red;
+            text-transform: uppercase;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .diamond {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 60px;
+            line-height: 1;
+        }
+
+        .diamond-left {
+            left: calc(50% - 100px);
+        }
+
+        .diamond-right {
+            right: calc(50% - 100px);
+        }
+    </style>
+</head>
+<body>
+    <div id="text">
+        <span class="diamond diamond-left">◆</span>
+        <span>MISHA</span>
+        <span class="diamond diamond-right">◆</span>
+    </div>
+
+    <script>
+        const colors = ['red', 'green', 'blue', 'black'];
+
+        function getContrastColor(exclude) {
+            const available = colors.filter(c => c !== exclude);
+            return available[Math.floor(Math.random() * available.length)];
+        }
+
+        function positionDiamonds() {
+            const text = document.getElementById('text');
+            const leftDiamond = text.querySelector('.diamond-left');
+            const rightDiamond = text.querySelector('.diamond-right');
+            const rect = text.getBoundingClientRect();
+            const halfViewport = window.innerWidth / 2;
+            const textHalfWidth = rect.width / 2;
+            const gap = (halfViewport - textHalfWidth) / 2;
+            
+            leftDiamond.style.left = `calc(50% - ${textHalfWidth + gap}px)`;
+            rightDiamond.style.right = `calc(50% - ${textHalfWidth + gap}px)`;
+        }
+
+        document.addEventListener('mousemove', () => {
+            const bg = colors[Math.floor(Math.random() * colors.length)];
+            const fg = getContrastColor(bg);
+            document.body.style.backgroundColor = bg;
+            document.getElementById('text').style.color = fg;
+        });
+
+        window.addEventListener('resize', positionDiamonds);
+        window.addEventListener('DOMContentLoaded', positionDiamonds);
+    </script>
+</body>
+</html>
