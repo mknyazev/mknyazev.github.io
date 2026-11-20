@@ -29,7 +29,7 @@
 
         #text {
             font-family: 'Cinzel', serif;
-            font-size: 120px;
+            font-size: clamp(48px, 12vw, 120px);
             font-weight: 400;
             font-style: normal;
             letter-spacing: 0.3em;
@@ -39,22 +39,33 @@
             display: flex;
             align-items: center;
             position: relative;
+            padding: 0 60px;
         }
 
         .diamond {
-            position: absolute;
+            position: fixed;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 60px;
+            font-size: clamp(24px, 6vw, 60px);
             line-height: 1;
         }
 
         .diamond-left {
-            left: calc(50% - 100px);
+            left: 0;
         }
 
         .diamond-right {
-            right: calc(50% - 100px);
+            right: 0;
+        }
+
+        @media (max-width: 600px) {
+            #text {
+                padding: 0 30px;
+            }
+
+            .diamond {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -86,15 +97,20 @@
             rightDiamond.style.right = `calc(50% - ${textHalfWidth + gap}px)`;
         }
 
-        document.addEventListener('mousemove', () => {
+        function changeColor() {
             const bg = colors[Math.floor(Math.random() * colors.length)];
             const fg = getContrastColor(bg);
             document.body.style.backgroundColor = bg;
             document.getElementById('text').style.color = fg;
-        });
+        }
+
+        document.addEventListener('mousemove', changeColor);
+        document.addEventListener('touchmove', changeColor, { passive: true });
 
         window.addEventListener('resize', positionDiamonds);
-        window.addEventListener('DOMContentLoaded', positionDiamonds);
+        window.addEventListener('DOMContentLoaded', () => {
+            document.fonts.ready.then(positionDiamonds);
+        });
     </script>
 </body>
 </html>
